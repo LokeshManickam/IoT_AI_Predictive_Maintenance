@@ -24,8 +24,7 @@ Overcurrent conditions
 Traditional maintenance is reactive.
 This system introduces predictive maintenance using IoT and AI.
 
-⚙️ System Architecture
-4
+
 🔌 Hardware Components
 
 ESP32 Microcontroller
@@ -75,3 +74,72 @@ Linear Regression
 Time-Series Analysis
 
 Anomaly Detection
+
+📊 Features
+
+✔ Real-time pump health monitoring
+✔ Overcurrent detection
+✔ Dry run detection
+✔ Temperature monitoring
+✔ Cloud-based visualization
+✔ AI-based failure prediction
+
+📂 Project Structure
+📦 IoT-AI-Predictive-Maintenance-Irrigation-Pumps
+ ┣ 📂 hardware
+ ┣ 📂 firmware
+ ┣ 📂 data
+ ┣ 📂 ai-model
+ ┣ 📂 dashboard
+ ┣ README.md
+ ┗ requirements.txt
+
+📈 Sample Output
+
+Live sensor dashboard
+
+Failure prediction alerts
+
+Data trend graphs
+
+Model accuracy evaluation
+
+🎯 Applications
+
+Smart Agriculture
+
+Water Distribution Systems
+
+Industrial Motor Monitoring
+
+Preventive Maintenance Systems
+
+🛠 Technologies Used
+
+ESP32
+
+Embedded C / Arduino IDE
+
+Python
+
+Scikit-learn
+
+IoT Cloud Platform
+
+Data Visualization Tools
+
+📌 Future Improvements
+
+LSTM-based deep learning model
+
+Mobile application integration
+
+Edge AI deployment on microcontroller
+
+Remaining Useful Life (RUL) prediction
+
+👨‍💻 Author
+
+Lokesh Manickam
+Electrical Engineering Student
+Focused on IoT, AI, and Smart Power Systems
