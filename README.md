@@ -190,3 +190,14 @@ Remaining Useful Life (RUL) prediction
 Lokesh Manickam
 Electrical Engineering Student
 Focused on IoT, AI, and Smart Power Systems
+
+## 📊 Model Results
+
+The model achieved 100% accuracy on simulated test data.
+
+Confusion Matrix:
+- True Normal: 199
+- True Fault: 201
+- No misclassifications observed.
+
+Note: Since the dataset was synthetically generated with distinct separation between normal and fault conditions, the model performance is ideal. Real-world deployment may introduce noise and overlapping patterns.
