@@ -1,57 +1,71 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <DHT.h>
+#include "DHT.h"
 
 #define DHTPIN 4
 #define DHTTYPE DHT22
-#define CURRENT_SENSOR_PIN 34
-#define VIBRATION_PIN 35
-#define FLOW_SENSOR_PIN 27
 
-DHT dht(DHTPIN, DHTTYPE);
+#define CURRENT_SENSOR 34
+#define VIBRATION_SENSOR 35
+#define VOLTAGE_SENSOR 32
 
 const char* ssid = "YOUR_WIFI";
 const char* password = "YOUR_PASSWORD";
-const char* serverName = "http://your-server/api/data";
+const char* serverName = "http://YOUR_PC_IP:5000/predict";
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void connectWiFi() {
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nConnected!");
+}
 
 void setup() {
   Serial.begin(115200);
   dht.begin();
-  
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting...");
-  }
-  Serial.println("WiFi Connected");
+  connectWiFi();
 }
 
 void loop() {
 
-  float temperature = dht.readTemperature();
-  int currentValue = analogRead(CURRENT_SENSOR_PIN);
-  int vibrationValue = analogRead(VIBRATION_PIN);
-  int flowValue = digitalRead(FLOW_SENSOR_PIN);
-
-  Serial.println("---- Pump Data ----");
-  Serial.println("Temp: " + String(temperature));
-  Serial.println("Current: " + String(currentValue));
-  Serial.println("Vibration: " + String(vibrationValue));
-  Serial.println("Flow: " + String(flowValue));
-
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(serverName);
-    http.addHeader("Content-Type", "application/json");
-
-    String jsonData = "{\"temperature\":" + String(temperature) +
-                      ",\"current\":" + String(currentValue) +
-                      ",\"vibration\":" + String(vibrationValue) +
-                      ",\"flow\":" + String(flowValue) + "}";
-
-    http.POST(jsonData);
-    http.end();
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWiFi();
   }
+
+  float temperature = dht.readTemperature();
+  float current = analogRead(CURRENT_SENSOR);
+  float vibration = analogRead(VIBRATION_SENSOR);
+  float voltage = analogRead(VOLTAGE_SENSOR);
+
+  if (isnan(temperature)) {
+    Serial.println("Failed to read DHT sensor!");
+    return;
+  }
+
+  HTTPClient http;
+  http.begin(serverName);
+  http.addHeader("Content-Type", "application/json");
+
+  String jsonData = "{";
+  jsonData += "\"temperature\":" + String(temperature) + ",";
+  jsonData += "\"current\":" + String(current) + ",";
+  jsonData += "\"vibration\":" + String(vibration) + ",";
+  jsonData += "\"voltage\":" + String(voltage);
+  jsonData += "}";
+
+  int httpResponseCode = http.POST(jsonData);
+
+  Serial.print("Response Code: ");
+  Serial.println(httpResponseCode);
+
+  http.end();
 
   delay(5000);
 }

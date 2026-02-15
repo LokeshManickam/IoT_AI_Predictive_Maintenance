@@ -1,7 +1,5 @@
-numpy
+flask
 pandas
-matplotlib
-seaborn
 scikit-learn
 joblib
-flask             # if dashboard included
+requests
